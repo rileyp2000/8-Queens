@@ -31,21 +31,26 @@ public class ChessSquarePanel extends JPanel {
 		
 		g.setFont(f);
 		this.setBackground(back);
-		g.setColor(Color.BLACK);
+		if(back.equals(Color.BLACK))
+			g.setColor(Color.WHITE);
+		else
+			g.setColor(Color.BLACK);
 		
 		int x = (this.getWidth() / 2) - FONTSIZE/4; 
         int y = (this.getHeight() / 2) + FONTSIZE/4;
-        if(isQueen);
+        if(isQueen)
         	g.drawString("Q", x, y);
 			
 	}
 	
 	public void setBack(Color c) {
 		back = c;
+		repaint();
 	}
 	
 	public void setIsQueen(boolean q) {
 		isQueen = q;
+		repaint();
 	}
 	
 }
