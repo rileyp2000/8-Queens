@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +23,7 @@ public class EightQueensDisplay {
 	private static final int COLS = 8;
 	private static final int HEIGHT = 90 * ROWS;
 	private static final int WIDTH = 90 * COLS;
-	private static final Color FOOTER_COLOR = Color.MAGENTA;
+	private static final Color FOOTER_COLOR = Color.GRAY;
 	private static final Color HEADER_COLOR = Color.GRAY;
 	private static final int FONTSIZE = 20;
 	private static final Color TEXT_COLOR = Color.WHITE;
@@ -36,7 +37,9 @@ public class EightQueensDisplay {
 																	// panels
 																	// later
 	// you must keep a reference to them
-
+	/**
+	 * Constructs a new EightQueens Window without a provided solution
+	 */
 	EightQueensDisplay() {
 		buildFrame();
 
@@ -51,7 +54,11 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 	}
-
+	
+	/**
+	 * Constructs an EightQueens window with a solution
+	 * @param aSolution The solution to the Eight Queens problem provided by the user
+	 */
 	public EightQueensDisplay(int[][] aSolution) {
 		buildFrame();
 
@@ -66,7 +73,10 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 	}
-
+	
+	/**
+	 * Creates and sets up the JFrame
+	 */
 	private void buildFrame() {
 		window = new JFrame("Practicing");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +84,12 @@ public class EightQueensDisplay {
 		// could set min, max, and preferred dimensions, I think
 		window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 	}
-
+	
+	/**
+	 * Creates the Header Jpanel, adds text to it, and returns the new JPanel
+	 * @param s the String to put as the Header
+	 * @return the created JPanel
+	 */
 	private JPanel buildHeaderPanel(String s) {
 		JPanel p = new JPanel();
 		p.setMinimumSize(new Dimension(WIDTH, 10));
@@ -86,11 +101,22 @@ public class EightQueensDisplay {
 		p.add(j);
 		return p;
 	}
-
+	
+	/**
+	 * determines if a number is even
+	 * @param x the number to find if it is even
+	 * @return if the number is even
+	 */
 	private boolean isEven(int x) {
 		return x % 2 == 0;
 	}
-
+	
+	/**
+	 * Sets the color of the panel according to a checkerboard
+	 * @param row the row of the panel
+	 * @param col the column of the panel
+	 * @return the Color chosen for the panel
+	 */
 	private Color setPanelColor(int row, int col) {
 		// Come up with an algorithm that will provide alternate colors
 		if (isEven(row + col))
@@ -141,7 +167,9 @@ public class EightQueensDisplay {
 		p.setMaximumSize(new Dimension(WIDTH, 50));
 		p.setPreferredSize(new Dimension(WIDTH, 40));
 		p.setBackground(FOOTER_COLOR);
-
+		
+		JButton recur = new JButton("Recursively find all solutions");
+		p.add(recur);
 		// TODO- add Buttons
 		return p;
 	}
