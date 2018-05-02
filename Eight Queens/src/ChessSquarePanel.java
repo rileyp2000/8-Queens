@@ -19,13 +19,17 @@ public class ChessSquarePanel extends JPanel {
 	private static final int FONTSIZE = 20;
 	private static final Font f = new Font("Comic Sans MS", Font.PLAIN, FONTSIZE);
 	
-	
+	/**
+	 * Creates a square for the chess board
+	 * @param b The background color of the panel
+	 * @param is If the square should display a queen or not
+	 */
 	public ChessSquarePanel(Color b, boolean is) {
 		back = b;
 		isQueen = is;
 	}
 	
-	
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -43,16 +47,28 @@ public class ChessSquarePanel extends JPanel {
 			
 	}
 	
+	/**
+	 * Sets the background Color
+	 * @param c The Color of the background
+	 */
 	public void setBack(Color c) {
 		back = c;
 		repaint();
 	}
 	
+	/**
+	 * Sets if the panel should display a queen or not
+	 * @param q Whether the panel is a queen or not
+	 */
 	public void setIsQueen(boolean q) {
 		isQueen = q;
 		repaint();
 	}
 	
+	/**
+	 * Gets whether the panel will display a queen or not
+	 * @return Whether the panel displays a queen or not
+	 */
 	public boolean getIsQueen() {
 		return isQueen;
 	}

@@ -31,12 +31,7 @@ public class EightQueensDisplay {
 
 	private JFrame window;
 	private JPanel panelOne, panelTwo, panelThree;
-	ChessSquarePanel[][] spaces = new ChessSquarePanel[ROWS][COLS]; // In order
-																	// to update
-																	// the
-																	// panels
-																	// later
-	// you must keep a reference to them
+	ChessSquarePanel[][] spaces = new ChessSquarePanel[ROWS][COLS]; 
 
 	/**
 	 * Constructs a new EightQueens Window without a provided solution
