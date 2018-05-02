@@ -1,0 +1,19 @@
+EightQueensDisplay
+
+	Fields: numRow, numCol, height,width,colors for text and panels, frame, container panels, [][] of chessSquarePanels
+
+	Constructors:
+		1 constructor that creates a blank board, 1 that creates the board with a given solution
+			adds the three panels to the frame, and if it is given a solution passes that to the overloaded buildGrid
+	
+	Methods:
+		buildFrame():
+			Creates the frame with a size and default close
+		buildHeaderPanel(String s):
+			Creates the header panel, with the color and 
+		buildGridPanel():
+			
+		buildGridPanel(int[][] solutions):
+			
+		buildFooterPanel():
+			
