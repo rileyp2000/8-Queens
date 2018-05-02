@@ -37,6 +37,7 @@ public class EightQueensDisplay {
 																	// panels
 																	// later
 	// you must keep a reference to them
+
 	/**
 	 * Constructs a new EightQueens Window without a provided solution
 	 */
@@ -54,10 +55,12 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 	}
-	
+
 	/**
 	 * Constructs an EightQueens window with a solution
-	 * @param aSolution The solution to the Eight Queens problem provided by the user
+	 * 
+	 * @param aSolution
+	 *            The solution to the Eight Queens problem provided by the user
 	 */
 	public EightQueensDisplay(int[][] aSolution) {
 		buildFrame();
@@ -73,7 +76,7 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 	}
-	
+
 	/**
 	 * Creates and sets up the JFrame
 	 */
@@ -84,10 +87,12 @@ public class EightQueensDisplay {
 		// could set min, max, and preferred dimensions, I think
 		window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 	}
-	
+
 	/**
 	 * Creates the Header Jpanel, adds text to it, and returns the new JPanel
-	 * @param s the String to put as the Header
+	 * 
+	 * @param s
+	 *            the String to put as the Header
 	 * @return the created JPanel
 	 */
 	private JPanel buildHeaderPanel(String s) {
@@ -101,20 +106,25 @@ public class EightQueensDisplay {
 		p.add(j);
 		return p;
 	}
-	
+
 	/**
 	 * determines if a number is even
-	 * @param x the number to find if it is even
+	 * 
+	 * @param x
+	 *            the number to find if it is even
 	 * @return if the number is even
 	 */
 	private boolean isEven(int x) {
 		return x % 2 == 0;
 	}
-	
+
 	/**
 	 * Sets the color of the panel according to a checkerboard
-	 * @param row the row of the panel
-	 * @param col the column of the panel
+	 * 
+	 * @param row
+	 *            the row of the panel
+	 * @param col
+	 *            the column of the panel
 	 * @return the Color chosen for the panel
 	 */
 	private Color setPanelColor(int row, int col) {
@@ -125,6 +135,11 @@ public class EightQueensDisplay {
 			return Color.WHITE;
 	}
 
+	/**
+	 * Creates a blank chess board
+	 * 
+	 * @return The blank chess board
+	 */
 	private JPanel buildGridPanels() {
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(ROWS, COLS));
@@ -141,6 +156,13 @@ public class EightQueensDisplay {
 		return p;
 	}
 
+	/**
+	 * Builds the chess board with a given solution to display
+	 * 
+	 * @param sol
+	 *            the solution represented as a 2D array
+	 * @return The new chess board with the solution on it
+	 */
 	private JPanel buildGridPanels(int[][] sol) {
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(ROWS, COLS));
@@ -149,7 +171,7 @@ public class EightQueensDisplay {
 			for (int c = 0; c < COLS; c++) {
 				bg = setPanelColor(r, c);
 				ChessSquarePanel m = null;
-				if(sol[r][c] == 1)
+				if (sol[r][c] == 1)
 					m = new ChessSquarePanel(bg, true);
 				else
 					m = new ChessSquarePanel(bg, false);
@@ -161,25 +183,41 @@ public class EightQueensDisplay {
 		return p;
 	}
 
+	/**
+	 * Builds the footer panel and adds a button to it
+	 * 
+	 * @return The created footer panel
+	 */
 	private JPanel buildFooterPanel() {
 		JPanel p = new JPanel();
 		p.setMinimumSize(new Dimension(WIDTH, 10));
 		p.setMaximumSize(new Dimension(WIDTH, 50));
 		p.setPreferredSize(new Dimension(WIDTH, 40));
 		p.setBackground(FOOTER_COLOR);
-		
-		JButton recur = new JButton("Recursively find all solutions");
+
+		JButton recur = new JButton("\nRecursively find all solutions\n");
 		p.add(recur);
-		// TODO- add Buttons
+		JButton reset = new JButton("\nReset the board\n");
+		p.add(reset);
+		JButton disp = new JButton("\nDisplay one solution to the problem\n");
+		p.add(disp);
 		return p;
 	}
 
+	/**
+	 * Updates the chosen panel to switch whether it displays a queen or not
+	 * 
+	 * @param r
+	 *            the row of the panel
+	 * @param c
+	 *            the column of the panel
+	 */
 	public void updatePanel(int r, int c) {
 		// Demonstrating one way to update the panels in the grid
 		// grab the reference to the ChessSquarePanel - change the fields
-		ChessSquarePanel p = spaces[r][c];
-		// window.repaint(); // because the set fields update the graphics, this
-		// isn't needed
+		spaces[r][c].setIsQueen(!spaces[r][c].getIsQueen());
+		//ChessSquarePanel p = spaces[r][c];
+		
 	}
 
 	public static void main(String[] args) {
@@ -189,11 +227,13 @@ public class EightQueensDisplay {
 				{ 0, 1, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0 } };
 
 		EightQueensDisplay pg = new EightQueensDisplay(aSolution);
-		System.out.println("Which Cell (r c): ");
-		java.util.Scanner kb = new java.util.Scanner(System.in);
-		int row = kb.nextInt();
-		int col = kb.nextInt();
-		pg.updatePanel(row, col);
+		while (true) {
+			System.out.println("Which Cell (r c): ");
+			java.util.Scanner kb = new java.util.Scanner(System.in);
+			int row = kb.nextInt();
+			int col = kb.nextInt();
+			pg.updatePanel(row, col);
+		}
 
 	}
 

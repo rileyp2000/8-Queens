@@ -53,4 +53,7 @@ public class ChessSquarePanel extends JPanel {
 		repaint();
 	}
 	
+	public boolean getIsQueen() {
+		return isQueen;
+	}
 }
