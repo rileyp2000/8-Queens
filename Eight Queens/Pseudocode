@@ -8,12 +8,36 @@ EightQueensDisplay
 	
 	Methods:
 		buildFrame():
-			Creates the frame with a size and default close
+			Creates the frame with a size and default close operation and returns it
+		
 		buildHeaderPanel(String s):
-			Creates the header panel, with the color and 
+			Creates the header panel, with the specified string as the header text and returns it
+		
 		buildGridPanel():
-			
+			Creates a chess board without any queens on it and returns it.
+			Uses a grid layout with ChessSquarePanels, assigns values to the [][]
+		
 		buildGridPanel(int[][] solutions):
-			
+			Creates a chess board with the provided solution on it and returns it.
+			Uses a grid layout with ChessSquarePanels, assigns values to the [][]
+		
 		buildFooterPanel():
+			  Creates a new panel with three buttons that will reset the board, display the initial solution, and find all the 
+			  solutions recursively
+		
+		updatePanel(int r, int c):
+			Updates the ChessSquarePanel at the spot to the other state (from displaying a queen to not or vice versa)
+		
+
+ChessSquarePanel
+	
+	Fields: background color, isQueen, default
+	
+	Constructor:
+		Takes in a color and if the "Q" should be displayed
+	
+	Methods:
+		paintComponent(Graphics g):
+			changes the background color and then draws a "Q" in the center of the square if isQueen is true
+		getters and setters
 			
