@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -71,7 +72,31 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 	}
+	
+	
+	/**
+	 * Constructs an EightQueens window with a solution
+	 * 
+	 * @param aSolution
+	 *            The solution to the Eight Queens problem provided by the user
+	 */
+	public EightQueensDisplay(ArrayList<Queen> sol) {
+		buildFrame();
+		int[][] b = Queen.toFullBoard(sol);
+		
+		panelOne = buildHeaderPanel("Eight Queens Solution");
+		panelTwo = buildGridPanels(b);
+		panelThree = buildFooterPanel();
 
+		window.add(panelOne);
+		window.add(panelTwo);
+		window.add(panelThree);
+
+		// window.pack(); // Adjusts the frame size, so - collapses it ...
+		window.setVisible(true);
+	}
+	
+	
 	/**
 	 * Creates and sets up the JFrame
 	 */
@@ -214,7 +239,14 @@ public class EightQueensDisplay {
 		//ChessSquarePanel p = spaces[r][c];
 		
 	}
-
+	
+	
+	public void addQueens(ArrayList<Queen> placed) {
+		
+	}
+	
+	
+	
 	public static void main(String[] args) {
 
 		int[][] aSolution = new int[][] { { 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 0, 0, 0 },
