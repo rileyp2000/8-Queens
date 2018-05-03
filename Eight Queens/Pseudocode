@@ -39,5 +39,5 @@ ChessSquarePanel
 	Methods:
 		paintComponent(Graphics g):
 			changes the background color and then draws a "Q" in the center of the square if isQueen is true
-		getters and setters
+		getters and setters 
 			
