@@ -42,4 +42,5 @@ ChessSquarePanel
 		getters and setters 
 		
 Queen
-			
+	
+	Fields: row, column

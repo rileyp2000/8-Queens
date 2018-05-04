@@ -26,6 +26,8 @@ public class EightQueensDisplay {
 	private static final int WIDTH = 90 * COLS;
 	private static final Color FOOTER_COLOR = Color.GRAY;
 	private static final Color HEADER_COLOR = Color.GRAY;
+	private static final Color PANEL_COLOR1 = Color.BLUE;
+	private static final Color PANEL_COLOR2 = Color.YELLOW;
 	private static final int FONTSIZE = 20;
 	private static final Color TEXT_COLOR = Color.WHITE;
 	private static final Font f = new Font("Comic Sans MS", Font.PLAIN, FONTSIZE);
@@ -150,9 +152,9 @@ public class EightQueensDisplay {
 	private Color setPanelColor(int row, int col) {
 		// Come up with an algorithm that will provide alternate colors
 		if (isEven(row + col))
-			return Color.BLACK;
+			return PANEL_COLOR1;
 		else
-			return Color.WHITE;
+			return PANEL_COLOR2;
 	}
 
 	/**
