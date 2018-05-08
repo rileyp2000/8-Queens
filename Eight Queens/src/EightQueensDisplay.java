@@ -225,6 +225,7 @@ public class EightQueensDisplay {
 
 	public void recurFind() throws InterruptedException {
 		reset();
+		updatePanel(0,0);
 		recurQueens(0, 0);
 
 	}
@@ -241,13 +242,14 @@ public class EightQueensDisplay {
 			} else {
 				int ct = 0;
 				while (ct < 8) {
-					int row = (r + ct) % 8;
-					if (isLegal(row, c)) {
+					int row = ((r + ct + 1) % 7);
+					if (isLegal(row, c + 1)) {
 						updatePanel(row, c);
 						recurQueens(row, c + 1);
+						break;
 					} else {
 						ct++;
-						recurQueens(row + 1, c);
+						//recurQueens(row + 1, c);
 					}
 				}
 			}
@@ -267,6 +269,7 @@ public class EightQueensDisplay {
 				if (x2 == x1)
 					return false;
 				else {
+					int slope = Math.abs((y2 - y1) / (x2 - x1));
 					if (Math.abs((y2 - y1) / (x2 - x1)) == 1)
 						return false;
 				}
