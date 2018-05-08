@@ -45,6 +45,7 @@ public class EightQueensDisplay {
 	 * Constructs a new EightQueens Window without a provided solution
 	 */
 	EightQueensDisplay() {
+		
 		buildFrame();
 
 		panelOne = buildHeaderPanel("Eight Queens Solution");
@@ -255,7 +256,7 @@ public class EightQueensDisplay {
 	}
 
 	public boolean isLegal(int x1, int y1) {
-		if (onBoard.isEmpty() || onBoard.size() == 0)
+		if (onBoard.isEmpty())
 			return false;
 		else {
 			int y2 = 0;
@@ -268,12 +269,10 @@ public class EightQueensDisplay {
 				else {
 					if (Math.abs((y2 - y1) / (x2 - x1)) == 1)
 						return false;
-					else
-						return true;
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	/**
