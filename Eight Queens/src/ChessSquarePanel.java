@@ -72,4 +72,12 @@ public class ChessSquarePanel extends JPanel {
 	public boolean getIsQueen() {
 		return isQueen;
 	}
+	
+	/**
+	 * Gets the background color of the Panel
+	 * @return the background color of the panel
+	 */
+	public Color getBack(){
+		return back;
+	}
 }
