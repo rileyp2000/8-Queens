@@ -242,16 +242,18 @@ public class EightQueensDisplay {
 			} else {
 				int ct = 0;
 				while (ct < 8) {
-					int row = ((r + ct + 1) % 7);
+					int row = ((r + ct + 1) % 8);
 					if (isLegal(row, c + 1)) {
-						updatePanel(row, c);
+						updatePanel(row, c+1);
 						recurQueens(row, c + 1);
-						break;
+						
+						//break;
 					} else {
 						ct++;
 						//recurQueens(row + 1, c);
 					}
 				}
+				
 			}
 		}
 
