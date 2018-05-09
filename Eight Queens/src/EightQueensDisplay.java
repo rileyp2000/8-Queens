@@ -102,7 +102,10 @@ public class EightQueensDisplay {
 	private boolean isEven(int x) {
 		return x % 2 == 0;
 	}
-
+	
+	/**
+	 * updates the current board
+	 */
 	private void currentBoard() {
 		ArrayList<Queen> ret = new ArrayList<Queen>();
 
@@ -222,14 +225,24 @@ public class EightQueensDisplay {
 		}
 		currentBoard();
 	}
-
+	
+	/**
+	 * Method to call to start process
+	 * @throws InterruptedException
+	 */
 	public void recurFind() throws InterruptedException {
 		reset();
 		updatePanel(0,0);
 		recurQueens(0,0);
 
 	}
-
+	
+	/**
+	 * Recursive finding of solutions
+	 * @param r starting row
+	 * @param c starting column
+	 * @throws InterruptedException
+	 */
 	public void recurQueens(int r, int c) throws InterruptedException {
 		System.out.println("Recursive at: " + r + " , " + c);
 		if (onBoard.size() == 8)
@@ -247,11 +260,14 @@ public class EightQueensDisplay {
 						updatePanel(row, c+1);
 						recurQueens(row, c + 1);
 						
+						ct++;
 						//break;
 					} else {
 						ct++;
+						//updatePanel(row, c+1);
 						//recurQueens(row + 1, c);
 					}
+					
 				}
 				
 			}
@@ -268,7 +284,7 @@ public class EightQueensDisplay {
 			for (Queen q : onBoard) {
 				y2 = q.getC();
 				x2 = q.getR();
-				if (x2 == x1)
+				if (x2 == x1 || y1 == y2)
 					return false;
 				else {
 					int slope = Math.abs((y2 - y1) / (x2 - x1));
