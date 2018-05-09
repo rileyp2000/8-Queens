@@ -226,7 +226,7 @@ public class EightQueensDisplay {
 	public void recurFind() throws InterruptedException {
 		reset();
 		updatePanel(0,0);
-		recurQueens(0, 0);
+		recurQueens(0,0);
 
 	}
 
