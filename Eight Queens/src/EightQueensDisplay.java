@@ -230,35 +230,41 @@ public class EightQueensDisplay {
 		}
 		currentBoard();
 	}
-	
+
 	/**
 	 * Attempt no. 3
+	 * 
 	 * @param r
 	 * @param c
 	 */
-	public void recurNoGraphics(int r, int c){
-		//reset();
-		
+	public void recurNoGraphics(int r, int c) {
+		// reset();
+
 		boolean placed = false;
-		if(c < 8){
-			for(int ct = 0; ct < 8; ct++){
-				if(isLegal(ct, c)){
+		if (c < 8) {
+			for (int ct = 0; ct < 8; ct++) {
+				if (placed) {
+					onBoard.remove(onBoard.size() - 1);
+					System.out.println("Removed at: " + r + ", " + (c));
+					placed = false;
+				}
+				if (isLegal(ct, c)) {
 					onBoard.add(new Queen(ct, c));
 					System.out.println("Placed at: " + ct + ", " + c);
+					placed = true;
 					recurNoGraphics(ct, c + 1);
 				}
 			}
-		}
-		else{
-			if(onBoard.size() != 8){
-				onBoard.remove(onBoard.size()-1);
+		} else {
+			if (onBoard.size() != 8) {
+				onBoard.remove(onBoard.size() - 1);
 				System.out.println("Removed at: " + r + ", " + (c - 1));
 			}
+			else
+				System.out.println("Found a Solution!!!");
 		}
 	}
-	
-	
-	
+
 	/**
 	 * Method to call to start process
 	 * 
@@ -266,9 +272,9 @@ public class EightQueensDisplay {
 	 */
 	public void recurFind() throws InterruptedException {
 		reset();
-		//updatePanel(0,0);
-		//newRecur(0, 0);
-		recurNoGraphics(0,0);
+		// updatePanel(0,0);
+		// newRecur(0, 0);
+		recurNoGraphics(0, 0);
 
 	}
 
@@ -310,11 +316,11 @@ public class EightQueensDisplay {
 					System.out.println("No Solution");
 			}
 			if (!placed && c != 0) {
-				int lastUsedInC = pastPlaces.get(c-1).get(pastPlaces.get(c-1).size()-1);
+				int lastUsedInC = pastPlaces.get(c - 1).get(pastPlaces.get(c - 1).size() - 1);
 				updatePanel(lastUsedInC, c - 1);
-				//if(pastPlaces.get(c-1).size() >= 1)
-					//pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
-				//newRecur(lastUsedInC, c - 1);
+				// if(pastPlaces.get(c-1).size() >= 1)
+				// pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
+				// newRecur(lastUsedInC, c - 1);
 			}
 
 		}
@@ -342,7 +348,7 @@ public class EightQueensDisplay {
 					return false;
 				else {
 					if (x2 - x1 != 0) {
-						
+
 						if (Math.abs(y2 - y1) == Math.abs(x2 - x1))
 							return false;
 					} else
