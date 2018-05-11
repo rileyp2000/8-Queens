@@ -45,7 +45,7 @@ public class EightQueensDisplay {
 	 * Constructs a new EightQueens Window without a provided solution
 	 */
 	EightQueensDisplay() {
-		
+
 		buildFrame();
 
 		panelOne = buildHeaderPanel("Eight Queens Solution");
@@ -102,7 +102,7 @@ public class EightQueensDisplay {
 	private boolean isEven(int x) {
 		return x % 2 == 0;
 	}
-	
+
 	/**
 	 * updates the current board
 	 */
@@ -225,22 +225,68 @@ public class EightQueensDisplay {
 		}
 		currentBoard();
 	}
-	
+
 	/**
 	 * Method to call to start process
+	 * 
 	 * @throws InterruptedException
 	 */
 	public void recurFind() throws InterruptedException {
 		reset();
-		updatePanel(0,0);
-		recurQueens(0,0);
+		// updatePanel(0,0);
+		newRecur(0, 0);
 
 	}
-	
+
+	/**
+	 * Attempt No. 2. I hope to God this works
+	 * 
+	 * @param r
+	 * @param c
+	 * @throws InterruptedException
+	 */
+	public void newRecur(int r, int c) throws InterruptedException {
+		System.out.println("Recursive at: " + r + " , " + c);
+		if( c < 0 )
+			return;
+		else {
+			boolean placed = false;
+			for (int ct = 0; ct < 8; ct++) {
+				int row = (r + ct) % 8;
+
+				if (isLegal(row, c)) {
+					System.out.println("Should be displaying at: " + row + ", " + c);
+					updatePanel(row, c);
+					//Thread.sleep(500);
+					newRecur(row, c + 1);
+					placed = true;
+					// Thread.sleep(500);
+					System.out.println("Should not be displaying at: " + row + ", " + c);
+					updatePanel(row, c);
+				}
+			}
+			if (c == 7) {
+				System.out.println("Reached Final Column");
+				if (onBoard.size() == 8)
+					displaySolve();
+				else
+					System.out.println("No Solution");
+			}
+			if (!placed) {
+				updatePanel(r, c - 1);
+				newRecur(r, c - 1);
+			}
+
+		}
+	}
+
 	/**
 	 * Recursive finding of solutions
-	 * @param r starting row
-	 * @param c starting column
+	 * 
+	 * @param r
+	 *            starting row
+	 * @param c
+	 *            starting column
 	 * @throws InterruptedException
 	 */
 	public void recurQueens(int r, int c) throws InterruptedException {
@@ -257,19 +303,19 @@ public class EightQueensDisplay {
 				while (ct < 8) {
 					int row = ((r + ct + 1) % 8);
 					if (isLegal(row, c + 1)) {
-						updatePanel(row, c+1);
+						updatePanel(row, c + 1);
 						recurQueens(row, c + 1);
-						
+
 						ct++;
-						//break;
+						// break;
 					} else {
 						ct++;
-						//updatePanel(row, c+1);
-						//recurQueens(row + 1, c);
+						// updatePanel(row, c+1);
+						// recurQueens(row + 1, c);
 					}
-					
+
 				}
-				
+
 			}
 		}
 
@@ -277,7 +323,7 @@ public class EightQueensDisplay {
 
 	public boolean isLegal(int x1, int y1) {
 		if (onBoard.isEmpty())
-			return false;
+			return true;
 		else {
 			int y2 = 0;
 			int x2 = 0;
@@ -287,9 +333,13 @@ public class EightQueensDisplay {
 				if (x2 == x1 || y1 == y2)
 					return false;
 				else {
-					int slope = Math.abs((y2 - y1) / (x2 - x1));
-					if (Math.abs((y2 - y1) / (x2 - x1)) == 1)
-						return false;
+					if(x2-x1 != 0){
+						double slope = Math.abs((y2 - y1 + 0.0) / (x2 - x1));
+						if (Math.abs((y2 - y1 + 0.0) / (x2 - x1)) == 1)
+							return false;
+					}
+					else
+						return y2-y1 == 0;
 				}
 			}
 		}
