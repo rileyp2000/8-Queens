@@ -29,7 +29,6 @@ public class EightQueensDisplay {
 	private static final Color PANEL_COLOR1 = Color.BLUE;
 	private static final Color PANEL_COLOR2 = Color.YELLOW;
 	private static final int FONTSIZE = 20;
-	private static final Color TEXT_COLOR = Color.WHITE;
 	private static final Font f = new Font("Comic Sans MS", Font.PLAIN, FONTSIZE);
 	private static final ArrayList<Queen> SOL = Queen
 			.toQueenList(new int[][] { { 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 0, 0, 0 },
@@ -231,7 +230,35 @@ public class EightQueensDisplay {
 		}
 		currentBoard();
 	}
-
+	
+	/**
+	 * Attempt no. 3
+	 * @param r
+	 * @param c
+	 */
+	public void recurNoGraphics(int r, int c){
+		//reset();
+		
+		boolean placed = false;
+		if(c < 8){
+			for(int ct = 0; ct < 8; ct++){
+				if(isLegal(ct, c)){
+					onBoard.add(new Queen(ct, c));
+					System.out.println("Placed at: " + ct + ", " + c);
+					recurNoGraphics(ct, c + 1);
+				}
+			}
+		}
+		else{
+			if(onBoard.size() != 8){
+				onBoard.remove(onBoard.size()-1);
+				System.out.println("Removed at: " + r + ", " + (c - 1));
+			}
+		}
+	}
+	
+	
+	
 	/**
 	 * Method to call to start process
 	 * 
@@ -240,7 +267,8 @@ public class EightQueensDisplay {
 	public void recurFind() throws InterruptedException {
 		reset();
 		//updatePanel(0,0);
-		newRecur(0, 0);
+		//newRecur(0, 0);
+		recurNoGraphics(0,0);
 
 	}
 
@@ -286,7 +314,7 @@ public class EightQueensDisplay {
 				updatePanel(lastUsedInC, c - 1);
 				//if(pastPlaces.get(c-1).size() >= 1)
 					//pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
-				newRecur(lastUsedInC, c - 1);
+				//newRecur(lastUsedInC, c - 1);
 			}
 
 		}
@@ -314,8 +342,8 @@ public class EightQueensDisplay {
 					return false;
 				else {
 					if (x2 - x1 != 0) {
-						double slope = Math.abs((y2 - y1 + 0.0) / (x2 - x1));
-						if (Math.abs((y2 - y1 + 0.0) / (x2 - x1)) == 1)
+						
+						if (Math.abs(y2 - y1) == Math.abs(x2 - x1))
 							return false;
 					} else
 						return y2 - y1 == 0;
