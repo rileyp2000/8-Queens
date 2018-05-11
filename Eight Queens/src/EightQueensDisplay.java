@@ -238,15 +238,13 @@ public class EightQueensDisplay {
 	 * @param c
 	 */
 	public void recurNoGraphics(int r, int c) {
-		// reset();
-
 		boolean placed = false;
 		if (c < 8) {
 			for (int ct = 0; ct < 8; ct++) {
 				if (placed) {
-					onBoard.remove(onBoard.size() - 1);
-					System.out.println("Removed at: " + r + ", " + (c));
+					System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
 					placed = false;
+					//continue;
 				}
 				if (isLegal(ct, c)) {
 					onBoard.add(new Queen(ct, c));
@@ -257,8 +255,8 @@ public class EightQueensDisplay {
 			}
 		} else {
 			if (onBoard.size() != 8) {
-				onBoard.remove(onBoard.size() - 1);
-				System.out.println("Removed at: " + r + ", " + (c - 1));
+				
+				System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
 			}
 			else
 				System.out.println("Found a Solution!!!");

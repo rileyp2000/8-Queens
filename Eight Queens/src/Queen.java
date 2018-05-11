@@ -84,6 +84,14 @@ public class Queen {
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Queen at: " + r + ", " + c;
+	}
+
 
 
 
