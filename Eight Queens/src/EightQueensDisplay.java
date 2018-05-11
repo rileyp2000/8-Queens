@@ -41,6 +41,8 @@ public class EightQueensDisplay {
 	private ChessSquarePanel[][] spaces = new ChessSquarePanel[ROWS][COLS];
 	private ArrayList<Queen> onBoard;
 
+	private ArrayList<ArrayList<Integer>> pastPlaces;
+
 	/**
 	 * Constructs a new EightQueens Window without a provided solution
 	 */
@@ -60,6 +62,10 @@ public class EightQueensDisplay {
 
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
+
+		pastPlaces = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < ROWS; i++)
+			pastPlaces.add(new ArrayList<Integer>(8));
 	}
 
 	/**
@@ -247,22 +253,25 @@ public class EightQueensDisplay {
 	 */
 	public void newRecur(int r, int c) throws InterruptedException {
 		System.out.println("Recursive at: " + r + " , " + c);
-		if( c < 0 )
+		if (c < 0)
 			return;
 		else {
 			boolean placed = false;
-			for (int ct = 0; ct < 8; ct++) {
+			for (int ct = 0; ct < 7; ct++) {
 				int row = (r + ct) % 8;
 
 				if (isLegal(row, c)) {
-					System.out.println("Should be displaying at: " + row + ", " + c);
-					updatePanel(row, c);
-					//Thread.sleep(500);
-					newRecur(row, c + 1);
-					placed = true;
-					// Thread.sleep(500);
-					System.out.println("Should not be displaying at: " + row + ", " + c);
-					updatePanel(row, c);
+					if (!hasUsed(row, c)) {
+						System.out.println("Should be displaying at: " + row + ", " + c);
+						updatePanel(row, c);
+						pastPlaces.get(c).add(row);
+						// Thread.sleep(500);
+						newRecur(row, c + 1);
+						placed = true;
+						// Thread.sleep(500);
+						System.out.println("Should not be displaying at: " + row + ", " + c);
+						updatePanel(row, c);
+					}
 				}
 			}
 			if (c == 7) {
@@ -272,55 +281,26 @@ public class EightQueensDisplay {
 				else
 					System.out.println("No Solution");
 			}
-			if (!placed) {
-				updatePanel(r, c - 1);
-				newRecur(r, c - 1);
+			if (!placed && c != 0) {
+				int lastUsedInC = pastPlaces.get(c-1).get(pastPlaces.get(c-1).size()-1);
+				updatePanel(lastUsedInC, c - 1);
+				if(pastPlaces.get(c-1).size() >= 1)
+					pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
+				newRecur(lastUsedInC, c - 1);
 			}
 
 		}
 	}
 
 	/**
-	 * Recursive finding of solutions
+	 * Determines if a Queen can legally be placed
 	 * 
-	 * @param r
-	 *            starting row
-	 * @param c
-	 *            starting column
-	 * @throws InterruptedException
+	 * @param x1
+	 *            row
+	 * @param y1
+	 *            column
+	 * @return if the placement is legal
 	 */
-	public void recurQueens(int r, int c) throws InterruptedException {
-		System.out.println("Recursive at: " + r + " , " + c);
-		if (onBoard.size() == 8)
-			displaySolve();
-		else {
-
-			if (c == 7) {
-				System.out.println("No Solutions");
-				return;
-			} else {
-				int ct = 0;
-				while (ct < 8) {
-					int row = ((r + ct + 1) % 8);
-					if (isLegal(row, c + 1)) {
-						updatePanel(row, c + 1);
-						recurQueens(row, c + 1);
-
-						ct++;
-						// break;
-					} else {
-						ct++;
-						// updatePanel(row, c+1);
-						// recurQueens(row + 1, c);
-					}
-
-				}
-
-			}
-		}
-
-	}
-
 	public boolean isLegal(int x1, int y1) {
 		if (onBoard.isEmpty())
 			return true;
@@ -333,17 +313,33 @@ public class EightQueensDisplay {
 				if (x2 == x1 || y1 == y2)
 					return false;
 				else {
-					if(x2-x1 != 0){
+					if (x2 - x1 != 0) {
 						double slope = Math.abs((y2 - y1 + 0.0) / (x2 - x1));
 						if (Math.abs((y2 - y1 + 0.0) / (x2 - x1)) == 1)
 							return false;
-					}
-					else
-						return y2-y1 == 0;
+					} else
+						return y2 - y1 == 0;
 				}
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Returns true if the panel has been used before
+	 * 
+	 * @param r
+	 *            row of panel
+	 * @param c
+	 *            column of panel
+	 * @return if the panel has been used before
+	 */
+	public boolean hasUsed(int r, int c) {
+		for (int old : pastPlaces.get(c)) {
+			if (old == r)
+				return true;
+		}
+		return false;
 	}
 
 	/**
