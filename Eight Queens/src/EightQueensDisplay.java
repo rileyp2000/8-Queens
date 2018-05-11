@@ -239,7 +239,7 @@ public class EightQueensDisplay {
 	 */
 	public void recurFind() throws InterruptedException {
 		reset();
-		// updatePanel(0,0);
+		//updatePanel(0,0);
 		newRecur(0, 0);
 
 	}
@@ -257,7 +257,7 @@ public class EightQueensDisplay {
 			return;
 		else {
 			boolean placed = false;
-			for (int ct = 0; ct < 7; ct++) {
+			for (int ct = 0; ct < 8; ct++) {
 				int row = (r + ct) % 8;
 
 				if (isLegal(row, c)) {
@@ -284,8 +284,8 @@ public class EightQueensDisplay {
 			if (!placed && c != 0) {
 				int lastUsedInC = pastPlaces.get(c-1).get(pastPlaces.get(c-1).size()-1);
 				updatePanel(lastUsedInC, c - 1);
-				if(pastPlaces.get(c-1).size() >= 1)
-					pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
+				//if(pastPlaces.get(c-1).size() >= 1)
+					//pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
 				newRecur(lastUsedInC, c - 1);
 			}
 
