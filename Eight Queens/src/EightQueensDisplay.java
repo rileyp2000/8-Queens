@@ -30,7 +30,7 @@ public class EightQueensDisplay {
 	private static final Color PANEL_COLOR2 = Color.YELLOW;
 	private static final int FONTSIZE = 20;
 	private static final Font f = new Font("Comic Sans MS", Font.PLAIN, FONTSIZE);
-	private static final ArrayList<Queen> SOL = Queen
+	private static final ArrayList<Queen> PRESET_SOL = Queen
 			.toQueenList(new int[][] { { 0, 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 1, 0, 0, 0, 0 },
 					{ 1, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 1, 0, 0 },
 					{ 0, 1, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 1, 0, 0, 0 } });
@@ -40,7 +40,7 @@ public class EightQueensDisplay {
 	private ChessSquarePanel[][] spaces = new ChessSquarePanel[ROWS][COLS];
 	private ArrayList<Queen> onBoard;
 
-	private ArrayList<ArrayList<Integer>> pastPlaces;
+	private ArrayList<ArrayList<Queen>> allSolutions;
 
 	/**
 	 * Constructs a new EightQueens Window without a provided solution
@@ -62,9 +62,8 @@ public class EightQueensDisplay {
 		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 
-		pastPlaces = new ArrayList<ArrayList<Integer>>();
-		for (int i = 0; i < ROWS; i++)
-			pastPlaces.add(new ArrayList<Integer>(8));
+		allSolutions = new ArrayList<ArrayList<Queen>>();
+
 	}
 
 	/**
@@ -204,8 +203,7 @@ public class EightQueensDisplay {
 		// Demonstrating one way to update the panels in the grid
 		// grab the reference to the ChessSquarePanel - change the fields
 		spaces[r][c].setIsQueen(!spaces[r][c].getIsQueen());
-		// ChessSquarePanel p = spaces[r][c];
-		currentBoard();
+		// currentBoard();
 	}
 
 	/**
@@ -225,7 +223,7 @@ public class EightQueensDisplay {
 	 */
 	public void presetSolution() {
 		reset();
-		for (Queen q : SOL) {
+		for (Queen q : PRESET_SOL) {
 			updatePanel(q.getR(), q.getC());
 		}
 		currentBoard();
@@ -236,30 +234,36 @@ public class EightQueensDisplay {
 	 * 
 	 * @param r
 	 * @param c
+	 * @throws InterruptedException
 	 */
-	public void recurNoGraphics(int r, int c) {
+	public void recurNoGraphics(int r, int c) throws InterruptedException {
 		boolean placed = false;
 		if (c < 8) {
-			for (int ct = 0; ct < 8; ct++) {
+			for (int ct = 0; ct <= 8; ct++) {
 				if (placed) {
-					System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
+					//System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
+					onBoard.remove(onBoard.size() - 1);
 					placed = false;
-					//continue;
+					// continue;
 				}
 				if (isLegal(ct, c)) {
 					onBoard.add(new Queen(ct, c));
-					System.out.println("Placed at: " + ct + ", " + c);
+					//System.out.println("Placed at: " + ct + ", " + c);
 					placed = true;
 					recurNoGraphics(ct, c + 1);
 				}
 			}
 		} else {
 			if (onBoard.size() != 8) {
+				onBoard.remove(onBoard.size() - 1);
+				//System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
+			} else {
+				allSolutions.add(onBoard);
+				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
+				//Thread.sleep(2000);
+				displaySolve(onBoard);
 				
-				System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
 			}
-			else
-				System.out.println("Found a Solution!!!");
 		}
 	}
 
@@ -277,54 +281,6 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * Attempt No. 2. I hope to God this works
-	 * 
-	 * @param r
-	 * @param c
-	 * @throws InterruptedException
-	 */
-	public void newRecur(int r, int c) throws InterruptedException {
-		System.out.println("Recursive at: " + r + " , " + c);
-		if (c < 0)
-			return;
-		else {
-			boolean placed = false;
-			for (int ct = 0; ct < 8; ct++) {
-				int row = (r + ct) % 8;
-
-				if (isLegal(row, c)) {
-					if (!hasUsed(row, c)) {
-						System.out.println("Should be displaying at: " + row + ", " + c);
-						updatePanel(row, c);
-						pastPlaces.get(c).add(row);
-						// Thread.sleep(500);
-						newRecur(row, c + 1);
-						placed = true;
-						// Thread.sleep(500);
-						System.out.println("Should not be displaying at: " + row + ", " + c);
-						updatePanel(row, c);
-					}
-				}
-			}
-			if (c == 7) {
-				System.out.println("Reached Final Column");
-				if (onBoard.size() == 8)
-					displaySolve();
-				else
-					System.out.println("No Solution");
-			}
-			if (!placed && c != 0) {
-				int lastUsedInC = pastPlaces.get(c - 1).get(pastPlaces.get(c - 1).size() - 1);
-				updatePanel(lastUsedInC, c - 1);
-				// if(pastPlaces.get(c-1).size() >= 1)
-				// pastPlaces.get(c-1).remove(pastPlaces.get(c-1).size()-1);
-				// newRecur(lastUsedInC, c - 1);
-			}
-
-		}
-	}
-
-	/**
 	 * Determines if a Queen can legally be placed
 	 * 
 	 * @param x1
@@ -334,6 +290,8 @@ public class EightQueensDisplay {
 	 * @return if the placement is legal
 	 */
 	public boolean isLegal(int x1, int y1) {
+		if (x1 > 7 || y1 > 7)
+			return false;
 		if (onBoard.isEmpty())
 			return true;
 		else {
@@ -358,28 +316,11 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * Returns true if the panel has been used before
-	 * 
-	 * @param r
-	 *            row of panel
-	 * @param c
-	 *            column of panel
-	 * @return if the panel has been used before
-	 */
-	public boolean hasUsed(int r, int c) {
-		for (int old : pastPlaces.get(c)) {
-			if (old == r)
-				return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Displays a win scene if the board is solved
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void displaySolve() throws InterruptedException {
+	public void displaySolve(ArrayList<Queen> solution) throws InterruptedException {
 		for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {
 				if (spaces[r][c].getBack().equals(PANEL_COLOR1))
@@ -387,7 +328,11 @@ public class EightQueensDisplay {
 			}
 		}
 
-		Thread.sleep(5000);
+		for (Queen q : solution) {
+			updatePanel(q.getR(), q.getC());
+		}
+
+		//Thread.sleep(5000);
 
 		for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {
