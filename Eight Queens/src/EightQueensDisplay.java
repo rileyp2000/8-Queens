@@ -186,7 +186,14 @@ public class EightQueensDisplay {
 		reset.addActionListener(e -> reset());
 		p.add(reset);
 		JButton disp = new JButton("\nDisplay one solution to the problem\n");
-		disp.addActionListener(e -> presetSolution());
+		disp.addActionListener(e -> {
+			try {
+				presetSolution();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		p.add(disp);
 		return p;
 	}
@@ -198,11 +205,13 @@ public class EightQueensDisplay {
 	 *            the row of the panel
 	 * @param c
 	 *            the column of the panel
+	 * @throws InterruptedException
 	 */
-	public void updatePanel(int r, int c) {
+	public void updatePanel(int r, int c) throws InterruptedException {
 		// Demonstrating one way to update the panels in the grid
 		// grab the reference to the ChessSquarePanel - change the fields
 		spaces[r][c].setIsQueen(!spaces[r][c].getIsQueen());
+		Thread.sleep(50);
 		// currentBoard();
 	}
 
@@ -220,8 +229,10 @@ public class EightQueensDisplay {
 
 	/**
 	 * Wipes the board and displays the given solution
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void presetSolution() {
+	public void presetSolution() throws InterruptedException {
 		reset();
 		for (Queen q : PRESET_SOL) {
 			updatePanel(q.getR(), q.getC());
@@ -236,33 +247,36 @@ public class EightQueensDisplay {
 	 * @param c
 	 * @throws InterruptedException
 	 */
-	public void recurNoGraphics(int r, int c) throws InterruptedException {
+	public void recursiveFind(int r, int c) throws InterruptedException {
 		boolean placed = false;
 		if (c < 8) {
 			for (int ct = 0; ct <= 8; ct++) {
 				if (placed) {
-					//System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
-					onBoard.remove(onBoard.size() - 1);
+					Queen q = onBoard.remove(onBoard.size() - 1);
+					System.out.println("Removed at: " + q);
+					updatePanel(q.getR(), q.getC());
 					placed = false;
-					// continue;
+					
 				}
 				if (isLegal(ct, c)) {
 					onBoard.add(new Queen(ct, c));
-					//System.out.println("Placed at: " + ct + ", " + c);
+					updatePanel(ct, c);
+					System.out.println("Placed at: " + ct + ", " + c);
 					placed = true;
-					recurNoGraphics(ct, c + 1);
+					recursiveFind(ct, c + 1);
 				}
 			}
 		} else {
 			if (onBoard.size() != 8) {
-				onBoard.remove(onBoard.size() - 1);
-				//System.out.println("Removed at: " + onBoard.remove(onBoard.size() - 1));
+				Queen q = onBoard.remove(onBoard.size() - 1);
+				System.out.println("Removed at: " +
+				 q);
 			} else {
 				allSolutions.add(onBoard);
 				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
-				//Thread.sleep(2000);
+				// Thread.sleep(2000);
 				displaySolve(onBoard);
-				
+
 			}
 		}
 	}
@@ -276,7 +290,7 @@ public class EightQueensDisplay {
 		reset();
 		// updatePanel(0,0);
 		// newRecur(0, 0);
-		recurNoGraphics(0, 0);
+		recursiveFind(0, 0);
 
 	}
 
@@ -332,7 +346,7 @@ public class EightQueensDisplay {
 			updatePanel(q.getR(), q.getC());
 		}
 
-		//Thread.sleep(5000);
+		// Thread.sleep(5000);
 
 		for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {
