@@ -240,10 +240,10 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * Attempt no. 3
+	 * Recursive finds all solutions to the 8 queens problem
 	 * 
-	 * @param r
-	 * @param c
+	 * @param r the row of the panel
+	 * @param c the column of the panel
 	 * @throws InterruptedException
 	 */
 	public void recursiveFind(int r, int c) throws InterruptedException {
