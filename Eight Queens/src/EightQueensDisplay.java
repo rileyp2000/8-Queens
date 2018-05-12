@@ -211,8 +211,7 @@ public class EightQueensDisplay {
 		// Demonstrating one way to update the panels in the grid
 		// grab the reference to the ChessSquarePanel - change the fields
 		spaces[r][c].setIsQueen(!spaces[r][c].getIsQueen());
-		Thread.sleep(50);
-		// currentBoard();
+		//Thread.sleep(50);
 	}
 
 	/**
@@ -346,7 +345,7 @@ public class EightQueensDisplay {
 			updatePanel(q.getR(), q.getC());
 		}
 
-		// Thread.sleep(5000);
+		Thread.sleep(5000);
 
 		for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {

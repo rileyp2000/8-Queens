@@ -28,6 +28,26 @@ EightQueensDisplay
 		updatePanel(int r, int c):
 			Updates the ChessSquarePanel at the spot to the other state (from displaying a queen to not or vice versa)
 		
+		currentBoard():
+			Updates the onBoard list to reflect the current board
+			
+		reset():
+			Makes it a blank board
+		
+		presetSolution():
+			draws the preset solution on the board
+			
+		recursiveFind(int r, int c):
+			Finds all 92 solutions to the 8 queens problem
+			Algorithm:
+				if c < 8
+					for loop over all the indicies of the column
+						*For backtracking purposes* if something has already been placed in the row, remove it 
+						if you can place it at the spot, place it and recurse on the next column
+						otherwise, do nothing
+				if there are 8 queens on the board
+					display a win
+					otherwise, remove from the column and continue recursing backwards
 
 ChessSquarePanel
 	
