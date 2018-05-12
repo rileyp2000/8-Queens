@@ -182,10 +182,12 @@ public class EightQueensDisplay {
 			}
 		});
 		p.add(recur);
+		
 		JButton reset = new JButton("\nReset the board\n");
 		reset.addActionListener(e -> reset());
 		p.add(reset);
-		JButton disp = new JButton("\nDisplay one solution to the problem\n");
+		
+		JButton disp = new JButton("\nDisplay one solution");
 		disp.addActionListener(e -> {
 			try {
 				presetSolution();
@@ -195,6 +197,19 @@ public class EightQueensDisplay {
 			}
 		});
 		p.add(disp);
+		
+		JButton dispRecur = new JButton("Display all solutions");
+		dispRecur.addActionListener(e -> {
+			try {
+				showAll();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		p.add(dispRecur);
+		
+		
 		return p;
 	}
 
@@ -270,7 +285,9 @@ public class EightQueensDisplay {
 				Queen q = onBoard.remove(onBoard.size() - 1);
 				//System.out.println("Removed at: " + q);
 			} else {
+				System.out.println(onBoard);
 				allSolutions.add(onBoard);
+				System.out.println(allSolutions.get(allSolutions.size() - 1));
 				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
 				// Thread.sleep(2000);
 				//displaySolve(onBoard);
@@ -326,32 +343,48 @@ public class EightQueensDisplay {
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Shows all the solutions on the board
+	 * @throws InterruptedException for Thread.sleep()
+	 */
+	public void showAll() throws InterruptedException{
+		for(ArrayList<Queen> q : allSolutions){
+			System.out.println(q);
+			displaySolve(q);
+			//reset();
+		}
+	}
+	
+	
+	
 	/**
 	 * Displays a win scene if the board is solved
 	 * @param solution a Solution to the board
 	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void displaySolve(ArrayList<Queen> solution) throws InterruptedException {
-		for (int r = 0; r < spaces.length; r++) {
+		/*for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {
 				if (spaces[r][c].getBack().equals(PANEL_COLOR1))
 					spaces[r][c].setBack(Color.GREEN);
 			}
-		}
-
+		}*/
+		
+		//System.out.println("Should be showing " + solution);
 		for (Queen q : solution) {
 			updatePanel(q.getR(), q.getC());
 		}
-
-		Thread.sleep(5000);
-
+		
+		Thread.sleep(1000);
+		reset();
+		/*
 		for (int r = 0; r < spaces.length; r++) {
 			for (int c = 0; c < spaces[0].length; c++) {
 				if (spaces[r][c].getBack().equals(Color.GREEN))
 					spaces[r][c].setBack(PANEL_COLOR1);
 			}
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {
