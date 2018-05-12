@@ -205,7 +205,7 @@ public class EightQueensDisplay {
 	 *            the row of the panel
 	 * @param c
 	 *            the column of the panel
-	 * @throws InterruptedException
+	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void updatePanel(int r, int c) throws InterruptedException {
 		// Demonstrating one way to update the panels in the grid
@@ -229,7 +229,7 @@ public class EightQueensDisplay {
 	/**
 	 * Wipes the board and displays the given solution
 	 * 
-	 * @throws InterruptedException
+	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void presetSolution() throws InterruptedException {
 		reset();
@@ -244,7 +244,7 @@ public class EightQueensDisplay {
 	 * 
 	 * @param r the row of the panel
 	 * @param c the column of the panel
-	 * @throws InterruptedException
+	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void recursiveFind(int r, int c) throws InterruptedException {
 		boolean placed = false;
@@ -252,15 +252,15 @@ public class EightQueensDisplay {
 			for (int ct = 0; ct <= 8; ct++) {
 				if (placed) {
 					Queen q = onBoard.remove(onBoard.size() - 1);
-					System.out.println("Removed at: " + q);
-					updatePanel(q.getR(), q.getC());
+					//System.out.println("Removed at: " + q);
+					//updatePanel(q.getR(), q.getC());
 					placed = false;
 					
 				}
 				if (isLegal(ct, c)) {
 					onBoard.add(new Queen(ct, c));
-					updatePanel(ct, c);
-					System.out.println("Placed at: " + ct + ", " + c);
+					//updatePanel(ct, c);
+					//System.out.println("Placed at: " + ct + ", " + c);
 					placed = true;
 					recursiveFind(ct, c + 1);
 				}
@@ -268,13 +268,12 @@ public class EightQueensDisplay {
 		} else {
 			if (onBoard.size() != 8) {
 				Queen q = onBoard.remove(onBoard.size() - 1);
-				System.out.println("Removed at: " +
-				 q);
+				//System.out.println("Removed at: " + q);
 			} else {
 				allSolutions.add(onBoard);
 				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
 				// Thread.sleep(2000);
-				displaySolve(onBoard);
+				//displaySolve(onBoard);
 
 			}
 		}
@@ -283,7 +282,7 @@ public class EightQueensDisplay {
 	/**
 	 * Method to call to start process
 	 * 
-	 * @throws InterruptedException
+	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void recurFind() throws InterruptedException {
 		reset();
@@ -330,8 +329,8 @@ public class EightQueensDisplay {
 
 	/**
 	 * Displays a win scene if the board is solved
-	 * 
-	 * @throws InterruptedException
+	 * @param solution a Solution to the board
+	 * @throws InterruptedException for Thread.sleep
 	 */
 	public void displaySolve(ArrayList<Queen> solution) throws InterruptedException {
 		for (int r = 0; r < spaces.length; r++) {

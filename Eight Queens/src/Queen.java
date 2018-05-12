@@ -68,7 +68,7 @@ public class Queen {
 	 * @param fullBoard the 2d array representation of the board
 	 * @return An ArrayList of Queen objects representing the queens
 	 *
-	 *ArrayList<Queen>
+	 *
 	 */
 	public static ArrayList<Queen> toQueenList(int[][] fullBoard) {
 		ArrayList<Queen> ret = new ArrayList<Queen>();
