@@ -26,8 +26,8 @@ public class EightQueensDisplay {
 	private static final int WIDTH = 90 * COLS;
 	private static final Color FOOTER_COLOR = Color.GRAY;
 	private static final Color HEADER_COLOR = Color.GRAY;
-	private static final Color PANEL_COLOR1 = Color.BLUE;
-	private static final Color PANEL_COLOR2 = Color.YELLOW;
+	private static final Color PANEL_COLOR1 = Color.BLACK;
+	private static final Color PANEL_COLOR2 = Color.WHITE;
 	private static final int FONTSIZE = 20;
 	private static final Font f = new Font("Comic Sans MS", Font.PLAIN, FONTSIZE);
 	private static final ArrayList<Queen> PRESET_SOL = Queen
@@ -38,8 +38,8 @@ public class EightQueensDisplay {
 	private JFrame window;
 	private JPanel panelOne, panelTwo, panelThree;
 	private ChessSquarePanel[][] spaces = new ChessSquarePanel[ROWS][COLS];
-	private ArrayList<Queen> onBoard;
 
+	private ArrayList<Queen> onBoard;
 	private ArrayList<ArrayList<Queen>> allSolutions;
 
 	/**
@@ -59,7 +59,6 @@ public class EightQueensDisplay {
 		window.add(panelTwo);
 		window.add(panelThree);
 
-		// window.pack(); // Adjusts the frame size, so - collapses it ...
 		window.setVisible(true);
 
 		allSolutions = new ArrayList<ArrayList<Queen>>();
@@ -70,10 +69,9 @@ public class EightQueensDisplay {
 	 * Creates and sets up the JFrame
 	 */
 	private void buildFrame() {
-		window = new JFrame("Practicing");
+		window = new JFrame("8 Queens");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(new Dimension(WIDTH, HEIGHT));
-		// could set min, max, and preferred dimensions, I think
 		window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 	}
 
@@ -81,7 +79,7 @@ public class EightQueensDisplay {
 	 * Creates the Header Jpanel, adds text to it, and returns the new JPanel
 	 * 
 	 * @param s
-	 *            the String to put as the Header
+	 *            The String to put as the Header
 	 * @return the created JPanel
 	 */
 	private JPanel buildHeaderPanel(String s) {
@@ -97,7 +95,7 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * determines if a number is even
+	 * Determines if a number is even
 	 * 
 	 * @param x
 	 *            the number to find if it is even
@@ -161,7 +159,8 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * Builds the footer panel and adds a button to it
+	 * Builds the footer panel and adds buttons to it for finding and displaying
+	 * solutions
 	 * 
 	 * @return The created footer panel
 	 */
@@ -172,7 +171,7 @@ public class EightQueensDisplay {
 		p.setPreferredSize(new Dimension(WIDTH, 40));
 		p.setBackground(FOOTER_COLOR);
 
-		JButton recur = new JButton("\nRecursively find all solutions\n");
+		JButton recur = new JButton("\nRecursively find solutions\n");
 		recur.addActionListener(e -> {
 			try {
 				recurFind();
@@ -182,34 +181,35 @@ public class EightQueensDisplay {
 			}
 		});
 		p.add(recur);
-		
-		JButton reset = new JButton("\nReset the board\n");
-		reset.addActionListener(e -> reset());
-		p.add(reset);
-		
-		JButton disp = new JButton("\nDisplay one solution");
-		disp.addActionListener(e -> {
-			try {
-				presetSolution();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		p.add(disp);
-		
-		JButton dispRecur = new JButton("Display all solutions");
+
+		JButton dispRecur = new JButton("Display recursively found solutions");
 		dispRecur.addActionListener(e -> {
 			try {
-				showAll();
+				if (allSolutions.size() == 0)
+					recurFind();
+				displaySolve(allSolutions.get((int) (Math.random() * 91)));
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
 		p.add(dispRecur);
-		
-		
+
+		JButton reset = new JButton("\nReset board\n");
+		reset.addActionListener(e -> reset());
+		p.add(reset);
+
+		JButton disp = new JButton("\nDisplay one solution");
+		disp.addActionListener(e -> {
+			try {
+				displaySolve(PRESET_SOL);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		p.add(disp);
+
 		return p;
 	}
 
@@ -220,17 +220,15 @@ public class EightQueensDisplay {
 	 *            the row of the panel
 	 * @param c
 	 *            the column of the panel
-	 * @throws InterruptedException for Thread.sleep
+	 * @throws InterruptedException
+	 *             for Thread.sleep
 	 */
 	public void updatePanel(int r, int c) throws InterruptedException {
-		// Demonstrating one way to update the panels in the grid
-		// grab the reference to the ChessSquarePanel - change the fields
 		spaces[r][c].setIsQueen(!spaces[r][c].getIsQueen());
-		//Thread.sleep(50);
 	}
 
 	/**
-	 * Resets the board to a blank board
+	 * Resets the board to a blank board with no queens
 	 */
 	public void reset() {
 		for (int r = 0; r < spaces.length; r++) {
@@ -242,80 +240,12 @@ public class EightQueensDisplay {
 	}
 
 	/**
-	 * Wipes the board and displays the given solution
-	 * 
-	 * @throws InterruptedException for Thread.sleep
-	 */
-	public void presetSolution() throws InterruptedException {
-		reset();
-		for (Queen q : PRESET_SOL) {
-			updatePanel(q.getR(), q.getC());
-		}
-		currentBoard();
-	}
-
-	/**
-	 * Recursive finds all solutions to the 8 queens problem
-	 * 
-	 * @param r the row of the panel
-	 * @param c the column of the panel
-	 * @throws InterruptedException for Thread.sleep
-	 */
-	public void recursiveFind(int r, int c) throws InterruptedException {
-		boolean placed = false;
-		if (c < 8) {
-			for (int ct = 0; ct <= 8; ct++) {
-				if (placed) {
-					Queen q = onBoard.remove(onBoard.size() - 1);
-					//System.out.println("Removed at: " + q);
-					//updatePanel(q.getR(), q.getC());
-					placed = false;
-					
-				}
-				if (isLegal(ct, c)) {
-					onBoard.add(new Queen(ct, c));
-					//updatePanel(ct, c);
-					//System.out.println("Placed at: " + ct + ", " + c);
-					placed = true;
-					recursiveFind(ct, c + 1);
-				}
-			}
-		} else {
-			if (onBoard.size() != 8) {
-				Queen q = onBoard.remove(onBoard.size() - 1);
-				//System.out.println("Removed at: " + q);
-			} else {
-				System.out.println(onBoard);
-				allSolutions.add(onBoard);
-				System.out.println(allSolutions.get(allSolutions.size() - 1));
-				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
-				// Thread.sleep(2000);
-				//displaySolve(onBoard);
-
-			}
-		}
-	}
-
-	/**
-	 * Method to call to start process
-	 * 
-	 * @throws InterruptedException for Thread.sleep
-	 */
-	public void recurFind() throws InterruptedException {
-		reset();
-		// updatePanel(0,0);
-		// newRecur(0, 0);
-		recursiveFind(0, 0);
-
-	}
-
-	/**
 	 * Determines if a Queen can legally be placed
 	 * 
 	 * @param x1
-	 *            row
+	 *            row of placement
 	 * @param y1
-	 *            column
+	 *            column of placement
 	 * @return if the placement is legal
 	 */
 	public boolean isLegal(int x1, int y1) {
@@ -343,58 +273,87 @@ public class EightQueensDisplay {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Shows all the solutions on the board
-	 * @throws InterruptedException for Thread.sleep()
-	 */
-	public void showAll() throws InterruptedException{
-		for(ArrayList<Queen> q : allSolutions){
-			System.out.println(q);
-			displaySolve(q);
-			//reset();
-		}
-	}
-	
-	
-	
-	/**
-	 * Displays a win scene if the board is solved
-	 * @param solution a Solution to the board
-	 * @throws InterruptedException for Thread.sleep
+	 * Displays the given solution on the board
+	 * 
+	 * @param solution
+	 *            a Solution to the board
+	 * @throws InterruptedException
+	 *             for Thread.sleep
 	 */
 	public void displaySolve(ArrayList<Queen> solution) throws InterruptedException {
-		/*for (int r = 0; r < spaces.length; r++) {
-			for (int c = 0; c < spaces[0].length; c++) {
-				if (spaces[r][c].getBack().equals(PANEL_COLOR1))
-					spaces[r][c].setBack(Color.GREEN);
-			}
-		}*/
-		
-		//System.out.println("Should be showing " + solution);
-		for (Queen q : solution) {
-			updatePanel(q.getR(), q.getC());
-		}
-		
-		Thread.sleep(1000);
 		reset();
-		/*
-		for (int r = 0; r < spaces.length; r++) {
-			for (int c = 0; c < spaces[0].length; c++) {
-				if (spaces[r][c].getBack().equals(Color.GREEN))
-					spaces[r][c].setBack(PANEL_COLOR1);
+		for (Queen q : solution)
+			updatePanel(q.getR(), q.getC());
+		currentBoard();
+
+	}
+
+	/**
+	 * Method to call to start finding recursive solutions
+	 * 
+	 * @throws InterruptedException
+	 *             for Thread.sleep
+	 */
+	public void recurFind() throws InterruptedException {
+		reset();
+		// updatePanel(0,0);
+		// newRecur(0, 0);
+		recursiveFind(0, 0);
+
+	}
+
+	/**
+	 * Recursively finds all solutions to the 8 queens problem by going from
+	 * left to right with all legal combinations
+	 * 
+	 * @param r
+	 *            The row of the panel
+	 * @param c
+	 *            The column of the panel
+	 * @throws InterruptedException
+	 *             for Thread.sleep
+	 */
+	public void recursiveFind(int r, int c) throws InterruptedException {
+		boolean placed = false;
+		if (c < 8) {
+			for (int ct = 0; ct <= 8; ct++) {
+				// if there is already some queen on the current column, remove
+				// it
+				if (placed) {
+					/* Queen q = */ onBoard.remove(onBoard.size() - 1);
+					// System.out.println("Removed at: " + q);
+					placed = false;
+
+				}
+				// if you can place it, place it and move to the next row
+				if (isLegal(ct, c)) {
+					onBoard.add(new Queen(ct, c));
+					// System.out.println("Placed at: " + ct + ", " + c);
+					placed = true;
+					recursiveFind(ct, c + 1);
+				}
 			}
-		}*/
+		} else {
+			// if you get to the end and you dont have 8 queens, remove one and
+			// go back
+			if (onBoard.size() != 8) {
+				Queen q = onBoard.remove(onBoard.size() - 1);
+				// System.out.println("Removed at: " + q);
+			} else {
+				// add the solution to the solution set and keep going on
+				ArrayList<Queen> q = new ArrayList<Queen>(onBoard);
+				allSolutions.add(q);
+				System.out.println("Found the " + allSolutions.size() + "th Solution!!!");
+
+			}
+		}
 	}
 
 	public static void main(String[] args) {
 
 		EightQueensDisplay pg = new EightQueensDisplay();
-		/*
-		 * while (true) { System.out.println("Which Cell (r c): ");
-		 * java.util.Scanner kb = new java.util.Scanner(System.in); int row =
-		 * kb.nextInt(); int col = kb.nextInt(); pg.updatePanel(row, col); }
-		 */
 
 	}
 

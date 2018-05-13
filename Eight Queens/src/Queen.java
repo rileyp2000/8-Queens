@@ -8,14 +8,19 @@ import java.util.ArrayList;
  */
 public class Queen {
 	int r, c;
-
+	
+	/**
+	 * Creates a new Queen with a given row and column
+	 * @param row the row of the Queen
+	 * @param col the column of the Queen
+	 */
 	public Queen(int row, int col) {
 		r = row;
 		c = col;
 	}
 
 	/**
-	 * @return the r
+	 * @return the row
 	 */
 	public int getR() {
 		return r;
@@ -23,14 +28,14 @@ public class Queen {
 
 	/**
 	 * @param r
-	 *            the r to set
+	 *            the row to set
 	 */
 	public void setR(int r) {
 		this.r = r;
 	}
 
 	/**
-	 * @return the c
+	 * @return the column
 	 */
 	public int getC() {
 		return c;
@@ -38,7 +43,7 @@ public class Queen {
 
 	/**
 	 * @param c
-	 *            the c to set
+	 *            the column to set
 	 */
 	public void setC(int c) {
 		this.c = c;
