@@ -64,3 +64,4 @@ ChessSquarePanel
 Queen
 	
 	Fields: row, column
+	getters and setters
